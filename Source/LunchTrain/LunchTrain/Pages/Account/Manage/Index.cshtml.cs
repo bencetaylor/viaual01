@@ -44,6 +44,10 @@ namespace LunchTrain.Pages.Account.Manage
             [EmailAddress]
             public string Email { get; set; }
 
+            [Required]
+            [Display(Name = "Full Name")]
+            public string FullName { get; set; }
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
@@ -62,7 +66,8 @@ namespace LunchTrain.Pages.Account.Manage
             Input = new InputModel
             {
                 Email = user.Email,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                FullName = user.FullName
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -91,6 +96,15 @@ namespace LunchTrain.Pages.Account.Manage
                     throw new ApplicationException($"Unexpected error occurred setting email for user with ID '{user.Id}'.");
                 }
             }
+
+            //if (Input.FullName != user.FullName)
+            //{
+            //    //todo how to extend save with new field
+            //    if (!setPhoneResult.Succeeded)
+            //    {
+            //        throw new ApplicationException($"Unexpected error occurred setting full name for user with ID '{user.Id}'.");
+            //    }
+            //}
 
             if (Input.PhoneNumber != user.PhoneNumber)
             {

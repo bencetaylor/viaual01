@@ -9,6 +9,8 @@ namespace LunchTrain.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        //todo extend DB based on instructions here https://docs.microsoft.com/en-us/ef/core/get-started/aspnetcore/new-db
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

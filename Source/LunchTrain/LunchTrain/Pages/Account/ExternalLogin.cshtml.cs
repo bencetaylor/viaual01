@@ -43,6 +43,10 @@ namespace LunchTrain.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            [Required]
+            [Display(Name = "Full Name")]
+            public string FullName { get; set; }
         }
 
         public IActionResult OnGetAsync()
@@ -87,12 +91,14 @@ namespace LunchTrain.Pages.Account
                 // If the user does not have an account, then ask the user to create an account.
                 ReturnUrl = returnUrl;
                 LoginProvider = info.LoginProvider;
+                Input = new InputModel();
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
                 {
-                    Input = new InputModel
-                    {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
-                    };
+                    Input.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                }
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
+                {
+                    Input.FullName = info.Principal.FindFirstValue(ClaimTypes.Name);
                 }
                 return Page();
             }
@@ -108,7 +114,7 @@ namespace LunchTrain.Pages.Account
                 {
                     throw new ApplicationException("Error loading external login information during confirmation.");
                 }
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FullName = Input.FullName};
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
