@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,8 +9,13 @@ namespace LunchTrain.Data
 {
     public class Group
     {
-        public string Name;
-        public string Description;
-        public string Owner;
+        [Key]
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+        public string Owner { get; set; }
+
+        [ForeignKey("Owner")]
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }
