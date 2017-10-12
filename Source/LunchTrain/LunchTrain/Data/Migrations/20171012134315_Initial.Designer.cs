@@ -8,17 +8,18 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace LunchTrain.Data.Migrations
+namespace LunchTrain.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171004184149_171004-Identity-01")]
-    partial class _171004Identity01
+    [Migration("20171012134315_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452");
+                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("LunchTrain.Data.ApplicationUser", b =>
                 {
@@ -67,9 +68,82 @@ namespace LunchTrain.Data.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("LunchTrain.Data.Group", b =>
+                {
+                    b.Property<string>("Name")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("OwnerID");
+
+                    b.HasKey("Name");
+
+                    b.HasIndex("OwnerID");
+
+                    b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("LunchTrain.Data.GroupApplication", b =>
+                {
+                    b.Property<int>("GroupApplicationID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("GroupID");
+
+                    b.Property<string>("UserID");
+
+                    b.HasKey("GroupApplicationID");
+
+                    b.HasIndex("GroupID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("GroupApplications");
+                });
+
+            modelBuilder.Entity("LunchTrain.Data.GroupMemberFlag", b =>
+                {
+                    b.Property<int>("GroupMemberFlagID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("GroupID");
+
+                    b.Property<int>("Status");
+
+                    b.Property<string>("UserID");
+
+                    b.HasKey("GroupMemberFlagID");
+
+                    b.HasIndex("GroupID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("GroupMemberFlags");
+                });
+
+            modelBuilder.Entity("LunchTrain.Data.GroupMembership", b =>
+                {
+                    b.Property<int>("GroupMembershipID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("GroupID");
+
+                    b.Property<string>("UserID");
+
+                    b.HasKey("GroupMembershipID");
+
+                    b.HasIndex("GroupID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("GroupMemberships");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -90,7 +164,8 @@ namespace LunchTrain.Data.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -177,6 +252,46 @@ namespace LunchTrain.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("LunchTrain.Data.Group", b =>
+                {
+                    b.HasOne("LunchTrain.Data.ApplicationUser", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerID");
+                });
+
+            modelBuilder.Entity("LunchTrain.Data.GroupApplication", b =>
+                {
+                    b.HasOne("LunchTrain.Data.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupID");
+
+                    b.HasOne("LunchTrain.Data.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
+                });
+
+            modelBuilder.Entity("LunchTrain.Data.GroupMemberFlag", b =>
+                {
+                    b.HasOne("LunchTrain.Data.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupID");
+
+                    b.HasOne("LunchTrain.Data.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
+                });
+
+            modelBuilder.Entity("LunchTrain.Data.GroupMembership", b =>
+                {
+                    b.HasOne("LunchTrain.Data.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupID");
+
+                    b.HasOne("LunchTrain.Data.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
