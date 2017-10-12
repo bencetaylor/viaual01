@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace LunchTrain.Migrations
+namespace LunchTrain.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20171012134315_Initial")]
