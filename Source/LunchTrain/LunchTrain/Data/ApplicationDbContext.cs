@@ -23,5 +23,13 @@ namespace LunchTrain.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<Group> Groups { get; set; }
+
+        public DbSet<GroupApplication> GroupApplications { get; set; }
+
+        public DbSet<GroupMemberFlag> GroupMemberFlags { get; set; }
+
+        public DbSet<GroupMembership> GroupMemberships { get; set; }
     }
 }

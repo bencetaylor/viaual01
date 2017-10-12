@@ -13,9 +13,9 @@ namespace LunchTrain.Data
         public string Name { get; set; }
 
         public string Description { get; set; }
-        public string Owner { get; set; }
 
-        [ForeignKey("Owner")]
-        public ApplicationUser ApplicationUser { get; set; }
+        public string OwnerID { get; set; }
+
+        public ApplicationUser Owner { get; set; }
     }
 }

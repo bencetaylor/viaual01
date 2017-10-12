@@ -7,17 +7,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LunchTrain.Data
 {
+    public enum StatusFlag
+    {
+        WaitingForAnswer = 0,
+        ReadyToGo = 1,
+        CannotGo = 2
+    }
+
     public class GroupMemberFlag
     {
-        [Key, Column(Order = 1)]
-        public string GroupID { get; set; }
-        [Key, Column(Order = 2)]
-        public string UserID { get; set; }
-        public int Status { get; set; }
+        public int GroupMemberFlagID { get; set; }
 
-        [ForeignKey("GroupID")]
-        public virtual Group Group { get; set; }
-        [ForeignKey("UserID")]
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public StatusFlag Status { get; set; }
+
+        public string GroupID { get; set; }
+
+        public string UserID { get; set; }
+
+        public Group Group { get; set; }
+
+        public ApplicationUser User { get; set; }
     }
 }
