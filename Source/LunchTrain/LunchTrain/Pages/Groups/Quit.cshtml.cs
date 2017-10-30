@@ -11,9 +11,6 @@ namespace LunchTrain.Pages.Groups
 {
     public class QuitModel : PageModel
     {
-        public void OnGet()
-        {
-        }
         private readonly ApplicationDbContext _context;
 
         public QuitModel(ApplicationDbContext context)
@@ -40,12 +37,12 @@ namespace LunchTrain.Pages.Groups
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string id)
         {
-            /*if (id == null)
+            if (id == null)
             {
                 return NotFound();
-            }*/
+            }
 
             //TODO quit from group logic
             

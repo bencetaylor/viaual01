@@ -37,6 +37,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.Owner.FullName)
         </td>
+        <!--TODO if for get user id-->
         <td>
             <a asp-page="./Edit" asp-route-id="@item.Name">Edit</a> |
             <a asp-page="./Details" asp-route-id="@item.Name">Details</a> |
