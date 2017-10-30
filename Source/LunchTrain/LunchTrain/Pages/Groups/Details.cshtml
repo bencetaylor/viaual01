@@ -43,7 +43,7 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Input.Email" class="control-label">Add user (by email)</label>
-            <input asp-for="Input.Email" class="form-control" />
+            <input asp-for="Input.Email" class="form-control" required/>
             <span asp-validation-for="Input.Email" class="text-danger"></span>
         </div>
 
