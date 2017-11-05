@@ -5,89 +5,21 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-
-    <nav class="navbar navbar-inverse navbar-fixed-left">
-        <div class="navbar-header">
-            <div class="panel-group">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <img class="navbar-left" src="#">
-                        <a data-toggle="collapse" class="navbar-link" href="#Profile1">
-                            @UserManager.GetUserName(User)
-                        </a>
-                        <span class="glyphicon glyphicon-user"></span>
-                    </h4>
-                </div>
-                <div id="Profile1" class="panel-collapse collapse">
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <a asp-page="/Account/Manage/Index" title="Manage">Profile</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="#">Settings</a>
-                        </li>
-                        <li class="list-group-item">
-                            <form asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
-                                <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <form class="navbar-form navbar-left">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search">
-                <div class="input-group-btn">
-                    <button class="btn btn-default" type="submit">
-                        <i class="glyphicon glyphicon-search"></i>
-                    </button>
-                </div>
-            </div>
-        </form>
-        <div class="navbar-text">
-            <a asp-page="/Groups/Index">
-                <h4>Groups</h4>
-            </a>
-            <ul class="navbar list-unstyled">
-                <li><a asp-page="#" class="navbar-link">#group one</a></li>
-                <li><a asp-page="#" class="navbar-link">#group two</a></li>
-                <li><a asp-page="#" class="navbar-link">#group three</a></li>
-            </ul>
-        </div>
-        <div class="navbar-fixed-bottom">
-            <h4 class="navbar-text">Create Group</h4>
-            <a asp-page="/Groups/Create" class="btn btn-default" role="button">
-                <span class="glyphicon glyphicon-plus"></span>
-            </a>
-        </div>
-    </nav>
-
-
+    <form asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+            </li>
+            <li>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
+            </li>
+        </ul>
+    </form>
 }
 else
 {
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-page="/Index" class="navbar-brand">LunchTrain</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-page="/Index">Home</a></li>
-                    <li><a asp-page="/About">About</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a asp-page="/Account/Register">Register</a></li>
-                    <li><a asp-page="/Account/Login">Log in</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <ul class="nav navbar-nav navbar-right">
+        <li><a asp-page="/Account/Register">Register</a></li>
+        <li><a asp-page="/Account/Login">Log in</a></li>
+    </ul>
 }
