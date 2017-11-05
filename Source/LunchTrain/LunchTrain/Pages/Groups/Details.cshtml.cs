@@ -44,6 +44,14 @@ namespace LunchTrain.Pages.Groups
                 return RedirectToPage("./Index");
             }
 
+            // Add user to group
+            var newUserInGroup = new GroupMembership();
+            // ?? Biztos, hogy a Group OwnerID-ja Megfelel a GroupId-nak???
+            newUserInGroup.GroupID = Group.OwnerID;
+            newUserInGroup.UserID = user.Id;
+
+            _context.GroupMemberships.Add(newUserInGroup);
+
             return Page();
         }
 
