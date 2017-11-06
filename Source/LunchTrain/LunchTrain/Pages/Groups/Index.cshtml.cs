@@ -27,7 +27,7 @@ namespace LunchTrain.Pages.Groups
         public async Task OnGetAsync()
         {
             Group = await _context.Groups.Include(x => x.Owner).ToListAsync();
-            user = (await _userManager.GetUserAsync(HttpContext.User));
+            user = await _userManager.GetUserAsync(HttpContext.User);
         }
     }
 }

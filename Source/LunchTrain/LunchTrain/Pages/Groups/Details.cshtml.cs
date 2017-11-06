@@ -24,6 +24,7 @@ namespace LunchTrain.Pages.Groups
 
         public Group Group { get; set; }
         public ApplicationUser User { get; set; }
+        public List<ApplicationUser> Users { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -63,6 +64,18 @@ namespace LunchTrain.Pages.Groups
             }
 
             Group = await _context.Groups.Include(x => x.Owner).SingleOrDefaultAsync(m => m.Name == id);
+
+            Users = new List<ApplicationUser>();
+
+            foreach (var member in _context.GroupMemberships)
+            {
+                // Szinte biztos hogy a GroupID és az OwnerID nem ugyan az....
+                if(member.GroupID == Group.OwnerID)
+                {
+                    Users.Add( await _userManager.FindByIdAsync(member.UserID) );
+                }
+            }
+
 
             if (Group == null)
             {
