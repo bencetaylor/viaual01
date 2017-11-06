@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using LunchTrain.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace LunchTrain.Pages.Groups
 {
     public class DeleteModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public DeleteModel(ApplicationDbContext context)
+        public DeleteModel(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -46,7 +49,7 @@ namespace LunchTrain.Pages.Groups
 
             Group = await _context.Groups.FindAsync(id);
 
-            if (Group != null)
+            if (Group != null && Group.OwnerID == (await _userManager.GetUserAsync(HttpContext.User)).Id)
             {
                 _context.Groups.Remove(Group);
                 await _context.SaveChangesAsync();
