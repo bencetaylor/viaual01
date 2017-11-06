@@ -1,0 +1,31 @@
+﻿@using LunchTrain.Extensions
+@using LunchTrain.Views.Shared.Components.GroupStatusComponent
+@model GroupStatusViewModel
+
+@{
+    // invoke this way:
+    // @await Component.InvokeAsync("GroupStatusComponent", new { groupName = ... })
+}
+
+<div class="groupStatusComponent">
+    <h3> @Model.GroupName </h3>
+    @if (Model.IsCurrentUserOwner)
+    {
+        <a href="#">Force reset</a>
+    }
+    @if (!Model.IsCurrentUserStatusSet)
+    {
+        <a class="canGoButton" href="#">Accept - IŰ'm ready to go</a>
+        <a class="cannotGoButton" href="#">Decline - I can't go</a>
+    }
+    else
+    {
+        <p>@Model.CurrentUserStatus.HumanizeStatusFlag(true)</p>
+    }
+    <ul>
+        @foreach (var gmm in Model.GroupMembers)
+        {
+            <li>@gmm.UserName - @gmm.MemberStatus.HumanizeStatusFlag(false)</li>
+        }
+    </ul>
+</div>
