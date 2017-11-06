@@ -19,19 +19,6 @@ namespace LunchTrain.Views.Shared.Components.GroupStatusComponent
         public StatusFlag CurrentUserStatus { get; set; }
 
         public List<GroupStatusMemberViewModel> GroupMembers { get; set; }
-
-        public string CurrentUserStatusHumanized()
-        {
-            switch (CurrentUserStatus)
-            {
-                case StatusFlag.ReadyToGo:
-                    return "are ready to go";
-                case StatusFlag.CannotGo:
-                    return "can't go";
-                default:
-                    return "";
-            }
-        }
     }
 
     public class GroupStatusMemberViewModel
