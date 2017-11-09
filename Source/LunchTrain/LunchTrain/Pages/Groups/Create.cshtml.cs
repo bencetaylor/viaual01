@@ -39,7 +39,11 @@ namespace LunchTrain.Pages.Groups
             {
                 return Page();
             }
+            GroupMembership groupMembership = new GroupMembership();
+            groupMembership.GroupID = Group.Name;
+            groupMembership.UserID = Group.OwnerID;
 
+            _context.GroupMemberships.Add(groupMembership);
             _context.Groups.Add(Group);
             await _context.SaveChangesAsync();
 

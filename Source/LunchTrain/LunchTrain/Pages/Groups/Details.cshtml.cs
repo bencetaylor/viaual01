@@ -38,22 +38,28 @@ namespace LunchTrain.Pages.Groups
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await _userManager.FindByEmailAsync(Input.Email);
+            var user = await _userManager.FindByNameAsync(Input.Email);
+
+
+            // Nem találja meg a user-t!!!
             if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
             {
+                Console.WriteLine(Input.Email);
                 // Don't reveal that the user does not exist or is not confirmed
                 return RedirectToPage("./Index");
             }
+            else
+            {
+                // Add user to group
+                var newUserInGroup = new GroupMembership
+                {
+                    GroupID = Group.Name,
+                    UserID = user.Id
+                };
+                _context.GroupMemberships.Add(newUserInGroup);
 
-            // Add user to group
-            var newUserInGroup = new GroupMembership();
-            // ?? Biztos, hogy a Group OwnerID-ja Megfelel a GroupId-nak???
-            newUserInGroup.GroupID = Group.OwnerID;
-            newUserInGroup.UserID = user.Id;
-
-            _context.GroupMemberships.Add(newUserInGroup);
-
-            return Page();
+                return Page();
+            }
         }
 
         public async Task<IActionResult> OnGetAsync(string id)
@@ -69,13 +75,11 @@ namespace LunchTrain.Pages.Groups
 
             foreach (var member in _context.GroupMemberships)
             {
-                // Szinte biztos hogy a GroupID és az OwnerID nem ugyan az....
-                if(member.GroupID == Group.OwnerID)
+                if(member.GroupID == Group.Name)
                 {
                     Users.Add( await _userManager.FindByIdAsync(member.UserID) );
                 }
             }
-
 
             if (Group == null)
             {
