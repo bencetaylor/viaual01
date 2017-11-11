@@ -40,37 +40,84 @@
 </div>
 <div>
     <h4>Members</h4>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Users[0].FullName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Users[0].Email)
-                </th>
-                <th>
-                    Status Flag
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var item in Model.Users)
-            {
+    @if (Model.currentUser == Model.Group.Owner)
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FullName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        TODO statusflags
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Users[0].FullName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Users[0].Email)
+                    </th>
+                    <th>
+                        Status Flag
+                    </th>
+                    <th>
+                        Drop User
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Users)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            TODO statusflags
+                        </td>
+                        <td>
+                            <form method="post">
+                                <input type="hidden" asp-for="@item.FullName" />
+                                <input type="submit" value="Drop" class="btn btn-default" />
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Users[0].FullName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Users[0].Email)
+                    </th>
+                    <th>
+                        Status Flag
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Users)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            TODO statusflags
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    
 </div>
 <div>
     <form method="post">

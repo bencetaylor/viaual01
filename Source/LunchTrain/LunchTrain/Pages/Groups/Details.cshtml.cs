@@ -24,6 +24,8 @@ namespace LunchTrain.Pages.Groups
 
         public Group Group { get; set; }
         public ApplicationUser User { get; set; }
+
+        public ApplicationUser currentUser { get; set; }
         public List<ApplicationUser> Users { get; set; }
 
         [BindProperty]
@@ -36,13 +38,13 @@ namespace LunchTrain.Pages.Groups
             public string Email { get; set; }
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        
+
+        public async Task<IActionResult> OnPostAsync(string id)
         {
             var user = await _userManager.FindByNameAsync(Input.Email);
-
-
-            // Nem találja meg a user-t!!!
-            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+            
+            if (user == null || (await _userManager.IsEmailConfirmedAsync(user)))
             {
                 Console.WriteLine(Input.Email);
                 // Don't reveal that the user does not exist or is not confirmed
@@ -51,14 +53,19 @@ namespace LunchTrain.Pages.Groups
             else
             {
                 // Add user to group
-                var newUserInGroup = new GroupMembership
-                {
-                    GroupID = Group.Name,
-                    UserID = user.Id
-                };
-                _context.GroupMemberships.Add(newUserInGroup);
+                Group = await _context.Groups.Include(x => x.Owner).SingleOrDefaultAsync(m => m.Name == id);
 
-                return Page();
+                GroupMembership groupMembership = new GroupMembership();
+                groupMembership.GroupID = Group.Name;
+                groupMembership.UserID = user.Id;
+
+                _context.GroupMemberships.Add(groupMembership);
+
+                await _context.SaveChangesAsync();
+
+                // Ha egybõl visszaadom az oldalt valamiért nem fejezi be az adatbázis mûveleteket és az OnGet-nél elszáll
+                return RedirectToPage("./Index");
+               // return Page();
             }
         }
 
@@ -70,21 +77,23 @@ namespace LunchTrain.Pages.Groups
             }
 
             Group = await _context.Groups.Include(x => x.Owner).SingleOrDefaultAsync(m => m.Name == id);
-
-            Users = new List<ApplicationUser>();
-
-            foreach (var member in _context.GroupMemberships)
-            {
-                if(member.GroupID == Group.Name)
-                {
-                    Users.Add( await _userManager.FindByIdAsync(member.UserID) );
-                }
-            }
+            currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
             if (Group == null)
             {
                 return NotFound();
             }
+
+            Users = new List<ApplicationUser>();
+
+            foreach (var member in _context.GroupMemberships)
+            {
+                if (member.GroupID == Group.Name)
+                {
+                    Users.Add(await _userManager.FindByIdAsync(member.UserID));
+                }
+            }
+            
             return Page();
         }
     }
