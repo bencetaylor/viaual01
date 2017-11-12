@@ -51,6 +51,13 @@ namespace LunchTrain.Pages.Groups
 
             if (Group != null && Group.OwnerID == (await _userManager.GetUserAsync(HttpContext.User)).Id)
             {
+                foreach(var i in _context.GroupMemberships)
+                {
+                    if(i.GroupID == Group.Name)
+                    {
+                        _context.GroupMemberships.Remove(i);
+                    }
+                }
                 _context.Groups.Remove(Group);
                 await _context.SaveChangesAsync();
             }

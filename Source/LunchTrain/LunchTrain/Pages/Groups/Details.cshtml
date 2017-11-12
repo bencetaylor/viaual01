@@ -73,10 +73,11 @@
                             TODO statusflags
                         </td>
                         <td>
-                            <form method="post">
+                            <!--<form method="post">
                                 <input type="hidden" asp-for="@item.FullName" />
                                 <input type="submit" value="Drop" class="btn btn-default" />
-                            </form>
+                            </form>-->
+                            <a class="btn btn-danger" asp-page="./Details" asp-route-id="@item.FullName">Drop</a>
                         </td>
                     </tr>
                 }
