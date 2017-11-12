@@ -56,6 +56,8 @@ namespace LunchTrain.Pages.Groups
                 Group = await _context.Groups.Include(x => x.Owner).SingleOrDefaultAsync(m => m.Name == id);
 
                 GroupMembership groupMembership = new GroupMembership();
+                groupMembership.Group = Group;
+                groupMembership.User = user;
                 groupMembership.GroupID = Group.Name;
                 groupMembership.UserID = user.Id;
 
