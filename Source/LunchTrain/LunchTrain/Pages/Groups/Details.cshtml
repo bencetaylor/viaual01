@@ -10,11 +10,20 @@
 <div>
     <h4>Group</h4>
     <hr />
+    @if (Model.currentUser == Model.Group.Owner)
+    {
+        <div>
+            <a class="btn btn-default" asp-page="./Edit" asp-route-id="@Model.Group.Name">Edit</a> |
+            <a class="btn btn-default" asp-page="./Index">Back to List</a>
+        </div>
+    }
+    else
+    {
+        <div>
+            <a class="btn btn-default" asp-page="./Index">Back to List</a>
+        </div>
+    }
 
-    <div>
-        <a class="btn btn-default" asp-page="./Edit" asp-route-id="@Model.Group.Name">Edit</a> |
-        <a class="btn btn-default" asp-page="./Index">Back to List</a>
-    </div>
 
     <hr />
     <dl class="dl-horizontal">
