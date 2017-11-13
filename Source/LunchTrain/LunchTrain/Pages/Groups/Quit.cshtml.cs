@@ -4,21 +4,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using LunchTrain.Data;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace LunchTrain.Pages.Groups
 {
-    public class DeleteModel : PageModel
+    public class QuitModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public DeleteModel(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public QuitModel(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
         [BindProperty]
@@ -47,21 +44,8 @@ namespace LunchTrain.Pages.Groups
                 return NotFound();
             }
 
-            Group = await _context.Groups.FindAsync(id);
-
-            if (Group != null && Group.OwnerID == (await _userManager.GetUserAsync(HttpContext.User)).Id)
-            {
-                foreach(var i in _context.GroupMemberships)
-                {
-                    if(i.GroupID == Group.Name)
-                    {
-                        _context.GroupMemberships.Remove(i);
-                    }
-                }
-                _context.Groups.Remove(Group);
-                await _context.SaveChangesAsync();
-            }
-
+            //TODO quit from group logic
+            
             return RedirectToPage("./Index");
         }
     }

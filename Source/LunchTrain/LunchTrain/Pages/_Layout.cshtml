@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using LunchTrain.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -17,6 +22,12 @@
     </environment>
 </head>
 <body>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        @await Html.PartialAsync("_SidebarLayout")
+    }
+    else
+    {
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -37,10 +48,13 @@
             </div>
         </div>
     </nav>
+
+    }
+    
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
+        <footer class="text-center col-lg-12">
             <p>&copy; 2017 - LunchTrain</p>
         </footer>
     </div>
@@ -69,3 +83,4 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+

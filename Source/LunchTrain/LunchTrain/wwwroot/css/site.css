@@ -33,3 +33,11 @@ body {
         display: none;
     }
 }
+
+.navbar-fixed-left {
+    position: fixed;
+    top: 0;
+    height: 100%;
+    width: 300px;
+    border: 0;
+}

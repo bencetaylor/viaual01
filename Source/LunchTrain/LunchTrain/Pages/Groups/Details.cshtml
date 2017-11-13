@@ -10,6 +10,13 @@
 <div>
     <h4>Group</h4>
     <hr />
+
+    <div>
+        <a class="btn btn-default" asp-page="./Edit" asp-route-id="@Model.Group.Name">Edit</a> |
+        <a class="btn btn-default" asp-page="./Index">Back to List</a>
+    </div>
+
+    <hr />
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Group.Name)
@@ -32,6 +39,98 @@
     </dl>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Group.Name">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+    <h4>Members</h4>
+    @if (Model.currentUser == Model.Group.Owner)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Users[0].FullName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Users[0].Email)
+                    </th>
+                    <th>
+                        Status Flag
+                    </th>
+                    <th>
+                        Drop User
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Users)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            TODO statusflags
+                        </td>
+                        <td>
+                            <!--<form method="post">
+                                <input type="hidden" asp-for="@item.FullName" />
+                                <input type="submit" value="Drop" class="btn btn-default" />
+                            </form>-->
+                            <a class="btn btn-danger" asp-page="./Details" asp-route-id="@item.FullName">Drop</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Users[0].FullName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Users[0].Email)
+                    </th>
+                    <th>
+                        Status Flag
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Users)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            TODO statusflags
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    
+</div>
+<div>
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Input.Email" class="control-label">Add user (by email)</label>
+            <input asp-for="Input.Email" class="form-control" required/>
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Invite" class="btn btn-default" />
+        </div>
+    </form>
 </div>
