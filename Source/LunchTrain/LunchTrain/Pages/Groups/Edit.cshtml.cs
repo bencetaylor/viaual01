@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LunchTrain.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace LunchTrain.Pages.Groups
 {
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public EditModel(ApplicationDbContext context)
+        public EditModel(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -45,7 +48,9 @@ namespace LunchTrain.Pages.Groups
                 return Page();
             }
 
-            _context.Attach(Group).State = EntityState.Modified;
+            if (Group != null && Group.OwnerID == (await _userManager.GetUserAsync(HttpContext.User)).Id) { 
+                _context.Attach(Group).State = EntityState.Modified;
+            }
 
             try
             {
