@@ -47,6 +47,12 @@
         </dd>
     </dl>
 </div>
+
+<div>
+    <h2>Try component</h2>
+    @await Component.InvokeAsync("GroupStatusComponent", new { groupName = Model.Group.Name })
+</div>
+
 <div>
     <h4>Members</h4>
     @if (Model.currentUser == Model.Group.Owner)
@@ -127,8 +133,9 @@
             </tbody>
         </table>
     }
-    
+   
 </div>
+
 <div>
     <form method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>

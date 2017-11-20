@@ -95,7 +95,7 @@ namespace LunchTrain.Pages.Groups
                     Users.Add(await _userManager.FindByIdAsync(member.UserID));
                 }
             }
-            
+
             return Page();
         }
     }

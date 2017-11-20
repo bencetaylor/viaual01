@@ -42,7 +42,7 @@ namespace LunchTrain.Views.Shared.Components.GroupStatusComponent
             _userManager = userManager;
         }
 
-        public async Task<IViewComponentResult> InvokedAsync(string groupName)
+        public async Task<IViewComponentResult> InvokeAsync(string groupName)
         {
             var group = _context.Groups.Single(x => x.Name == groupName);
 
@@ -52,19 +52,20 @@ namespace LunchTrain.Views.Shared.Components.GroupStatusComponent
             var members = _context.GroupMemberships.Where(x => x.GroupID == groupName);
             var flags = members.Select(x => _context.GroupMemberFlags.Single(y => y.UserID == x.UserID && y.GroupID == groupName));
 
-            var vm = new GroupStatusViewModel
+            var vm = new GroupStatusViewModel();
+
+            vm.GroupName = groupName;
+            vm.IsCurrentUserOwner = group.OwnerID == currentUserId;
+            //Itt valamiért elszáll...
+            vm.IsCurrentUserStatusSet = flags.Single(x => x.UserID == currentUserId).Status != StatusFlag.WaitingForAnswer;
+            vm.CurrentUserStatus = flags.Single(x => x.UserID == currentUserId).Status;
+            vm.GroupMembers = flags.Where(f => f.UserID != currentUserId).Select(x => new GroupStatusMemberViewModel
             {
-                GroupName = groupName,
-                IsCurrentUserOwner = group.OwnerID == currentUserId,
-                IsCurrentUserStatusSet = flags.Single(x => x.UserID == currentUserId).Status != StatusFlag.WaitingForAnswer,
-                CurrentUserStatus = flags.Single(x => x.UserID == currentUserId).Status,
-                GroupMembers = flags.Where(f => f.UserID != currentUserId).Select(x => new GroupStatusMemberViewModel
-                {
-                    UserId = x.UserID,
-                    UserName = x.User.FullName,
-                    MemberStatus = x.Status
-                }).ToList()
-            };
+                UserId = x.UserID,
+                UserName = x.User.FullName,
+                MemberStatus = x.Status
+            }).ToList();
+           
 
             return View(vm);
         }
