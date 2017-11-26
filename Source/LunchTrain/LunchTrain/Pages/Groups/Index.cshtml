@@ -27,6 +27,7 @@
     </thead>
     <tbody>
 @foreach (var item in Model.Group) {
+    bool alreadyUsed = false;
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
@@ -37,20 +38,55 @@
         <td>
             @Html.DisplayFor(modelItem => item.Owner.FullName)
         </td>
-        @if (item.Owner == Model.user) {
-        <td>
-            <a class="btn btn-default" asp-page="./Edit" asp-route-id="@item.Name">Edit</a> |
-            <a class="btn btn-default" asp-page="./Details" asp-route-id="@item.Name">Details</a> |
-            <a class="btn btn-danger" asp-page="./Delete" asp-route-id="@item.Name">Delete</a>
-        </td>
-        }
-        else
+        @foreach (var memberItem in Model.UserMemberGroups)
         {
-        <td>
-           <a class="btn btn-default" asp-page="./Details" asp-route-id="@item.Name">Details</a> |
-           <a class="btn btn-default" asp-page="./Quit" asp-route-id="@item.Name">Quit</a>
-        </td>
+            if (item.Name == memberItem.Name && alreadyUsed == false)
+            {
+                @if (item.Owner == Model.user)
+                {
+                    <td>
+                        <a class="btn btn-default" asp-page="./Edit" asp-route-id="@item.Name">Edit</a>
+                        <a class="btn btn-default" asp-page="./Details" asp-route-id="@item.Name">Details</a>
+                        <a class="btn btn-danger" asp-page="./Delete" asp-route-id="@item.Name">Delete</a>
+                    </td>
+                    alreadyUsed = true;
+                }
+                else
+                {
+                    <td>
+                        <a class="btn btn-default" asp-page="./Details" asp-route-id="@item.Name">Details</a>
+                        <a class="btn btn-default" asp-page="./Quit" asp-route-id="@item.Name">Quit</a>
+                    </td>
+                    alreadyUsed = true;
+                }
+            }
         }
+        @foreach (var applicationItem in Model.UserApplicationGroup)
+        {
+            if (applicationItem.Name == item.Name && alreadyUsed == false)
+            {
+                <td>
+                    <a class="btn btn-default" asp-page="./Details" asp-route-id="@item.Name">Details</a>
+                </td>
+                <td><h4>Applied</h4></td>
+                alreadyUsed = true;
+            }
+        }
+        
+        @if (alreadyUsed == false)
+        {
+            <td>
+                <a class="btn btn-default" asp-page="./Details" asp-route-id="@item.Name">Details</a>
+            </td>
+            <td>
+                <form method="post">
+                    <input type="hidden" asp-for="Input.Name" />
+                    <input type="submit" value="Apply" class="btn btn-default" />
+                </form>
+            </td>
+            alreadyUsed = true;
+        }
+
     </tr>
 }
     </tbody>
