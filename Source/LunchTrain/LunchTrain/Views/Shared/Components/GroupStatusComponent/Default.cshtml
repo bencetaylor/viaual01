@@ -4,14 +4,15 @@
 
 
 <div class="groupStatusComponent">
-    <h3> @Model.GroupName </h3>
+    
     @if (Model.IsCurrentUserOwner)
     {
-        <a href="#">Force reset</a>
+        <a href="#">Force reset</a><a> | </a>
     }
     @if (!Model.IsCurrentUserStatusSet)
     {
         <a class="canGoButton" href="#">Accept - I'm ready to go</a>
+        <a> | </a>
         <a class="cannotGoButton" href="#">Decline - I can't go</a>
     }
     else

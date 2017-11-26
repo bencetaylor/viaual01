@@ -49,7 +49,6 @@
 </div>
 
 <div>
-    <h2>Try component</h2>
     @await Component.InvokeAsync("GroupStatusComponent", new { groupName = Model.Group.Name })
 </div>
 
@@ -111,7 +110,7 @@
                         @Html.DisplayNameFor(model => model.Users[0].Email)
                     </th>
                     <th>
-                        Status Flag
+                        @Html.DisplayNameFor(model => model.Flags[0].Status)
                     </th>
                 </tr>
             </thead>
@@ -125,8 +124,9 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Email)
                         </td>
+                
                         <td>
-                            TODO statusflags
+                            @Html.DisplayFor(modelItem => Model.Flags[0].Status)
                         </td>
                     </tr>
                 }

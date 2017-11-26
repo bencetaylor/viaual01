@@ -27,6 +27,7 @@ namespace LunchTrain.Pages.Groups
 
         public ApplicationUser currentUser { get; set; }
         public List<ApplicationUser> Users { get; set; }
+        public List<GroupMemberFlag> Flags { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -60,6 +61,16 @@ namespace LunchTrain.Pages.Groups
                 groupMembership.User = user;
                 groupMembership.GroupID = Group.Name;
                 groupMembership.UserID = user.Id;
+
+                // Create ready-to-go flag for user
+                GroupMemberFlag groupMemberFlag = new GroupMemberFlag();
+                groupMemberFlag.Group = Group;
+                groupMemberFlag.GroupID = Group.Name;
+                groupMemberFlag.User = user;
+                groupMemberFlag.UserID = user.Id;
+                groupMemberFlag.Status = StatusFlag.WaitingForAnswer;
+
+                _context.GroupMemberFlags.Add(groupMemberFlag);
 
                 _context.GroupMemberships.Add(groupMembership);
 
@@ -95,6 +106,8 @@ namespace LunchTrain.Pages.Groups
                     Users.Add(await _userManager.FindByIdAsync(member.UserID));
                 }
             }
+
+            Flags = _context.GroupMemberFlags.ToList();
 
             return Page();
         }

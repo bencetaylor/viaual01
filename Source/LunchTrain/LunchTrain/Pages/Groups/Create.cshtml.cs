@@ -45,7 +45,15 @@ namespace LunchTrain.Pages.Groups
             groupMembership.GroupID = Group.Name;
             groupMembership.UserID = Group.OwnerID;
 
+            GroupMemberFlag groupMemberFlag = new GroupMemberFlag();
+            groupMemberFlag.Group = Group;
+            groupMemberFlag.GroupID = Group.Name;
+            groupMemberFlag.User = Group.Owner;
+            groupMemberFlag.UserID = Group.OwnerID;
+            groupMemberFlag.Status = StatusFlag.WaitingForAnswer;
+
             _context.GroupMemberships.Add(groupMembership);
+            _context.GroupMemberFlags.Add(groupMemberFlag);
             _context.Groups.Add(Group);
             await _context.SaveChangesAsync();
 
