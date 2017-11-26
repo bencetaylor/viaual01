@@ -14,6 +14,7 @@ namespace LunchTrain.Pages.Groups
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        public bool alreadyUsed = false;
 
         public IndexModel(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
@@ -27,24 +28,29 @@ namespace LunchTrain.Pages.Groups
         public IList<Group> UserApplicationGroup { get; set; }
 
         [BindProperty]
-        public Group Input { get; set; }
+        public InputModel Input { get; set; }
 
-        public async Task<IActionResult> OnPostAsync(string id)
+        public class InputModel
+        {
+            public string Name { get; set; }
+        }
+
+        public async Task<IActionResult> OnPostAsync()
         {
 
-            if (id == null)
+            if (Input.Name == null)
             {
-                return NotFound();
+                return NotFound();   
             }
 
-            Input = await _context.Groups.FindAsync(id);
             var currentuser = await _userManager.GetUserAsync(HttpContext.User);
+            Group group = await _context.Groups.Include(x => x.Owner).SingleOrDefaultAsync(m => m.Name == Input.Name);
 
-            if (Input != null)
+            if (group != null)
             {
 
                 GroupApplication groupApplication = new GroupApplication();
-                groupApplication.Group = Input;
+                groupApplication.Group = group;
                 groupApplication.User = currentuser;
                 groupApplication.GroupID = Input.Name;
                 groupApplication.UserID = currentuser.Id;

@@ -27,7 +27,7 @@
     </thead>
     <tbody>
 @foreach (var item in Model.Group) {
-    bool alreadyUsed = false;
+    Model.alreadyUsed = false;
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
@@ -40,7 +40,7 @@
         </td>
         @foreach (var memberItem in Model.UserMemberGroups)
         {
-            if (item.Name == memberItem.Name && alreadyUsed == false)
+            if (item.Name == memberItem.Name && Model.alreadyUsed == false)
             {
                 @if (item.Owner == Model.user)
                 {
@@ -49,7 +49,7 @@
                         <a class="btn btn-default" asp-page="./Details" asp-route-id="@item.Name">Details</a>
                         <a class="btn btn-danger" asp-page="./Delete" asp-route-id="@item.Name">Delete</a>
                     </td>
-                    alreadyUsed = true;
+                    Model.alreadyUsed = true;
                 }
                 else
                 {
@@ -57,34 +57,34 @@
                         <a class="btn btn-default" asp-page="./Details" asp-route-id="@item.Name">Details</a>
                         <a class="btn btn-default" asp-page="./Quit" asp-route-id="@item.Name">Quit</a>
                     </td>
-                    alreadyUsed = true;
+                    Model.alreadyUsed = true;
                 }
             }
         }
         @foreach (var applicationItem in Model.UserApplicationGroup)
         {
-            if (applicationItem.Name == item.Name && alreadyUsed == false)
+            if (applicationItem.Name == item.Name && Model.alreadyUsed == false)
             {
                 <td>
                     <a class="btn btn-default" asp-page="./Details" asp-route-id="@item.Name">Details</a>
                 </td>
                 <td><h4>Applied</h4></td>
-                alreadyUsed = true;
+                Model.alreadyUsed = true;
             }
         }
         
-        @if (alreadyUsed == false)
+        @if (Model.alreadyUsed == false)
         {
             <td>
                 <a class="btn btn-default" asp-page="./Details" asp-route-id="@item.Name">Details</a>
             </td>
             <td>
                 <form method="post">
-                    <input type="hidden" asp-for="Input.Name" />
+                    <input type="hidden" asp-for="Input.Name" value="@item.Name"/>
                     <input type="submit" value="Apply" class="btn btn-default" />
                 </form>
             </td>
-            alreadyUsed = true;
+            Model.alreadyUsed = true;
         }
 
     </tr>
