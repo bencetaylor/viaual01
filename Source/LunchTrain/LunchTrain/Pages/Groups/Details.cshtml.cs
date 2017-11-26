@@ -27,6 +27,7 @@ namespace LunchTrain.Pages.Groups
 
         public ApplicationUser currentUser { get; set; }
         public List<ApplicationUser> Users { get; set; }
+        public List<ApplicationUser> Applications { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -95,7 +96,16 @@ namespace LunchTrain.Pages.Groups
                     Users.Add(await _userManager.FindByIdAsync(member.UserID));
                 }
             }
-            
+
+            Applications = new List<ApplicationUser>();
+            foreach (var member in _context.GroupApplications)
+            {
+                if (member.GroupID == Group.Name)
+                {
+                    Users.Add(await _userManager.FindByIdAsync(member.UserID));
+                }
+            }
+
             return Page();
         }
     }
