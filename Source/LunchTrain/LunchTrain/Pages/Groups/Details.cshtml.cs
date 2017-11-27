@@ -28,6 +28,7 @@ namespace LunchTrain.Pages.Groups
         public ApplicationUser currentUser { get; set; }
         public List<ApplicationUser> Users { get; set; }
         public List<GroupMemberFlag> Flags { get; set; }
+        public List<ApplicationUser> Applications { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -76,7 +77,7 @@ namespace LunchTrain.Pages.Groups
 
                 await _context.SaveChangesAsync();
 
-                // Ha egybõl visszaadom az oldalt valamiért nem fejezi be az adatbázis mûveleteket és az OnGet-nél elszáll
+                // Ha egybï¿½l visszaadom az oldalt valamiï¿½rt nem fejezi be az adatbï¿½zis mï¿½veleteket ï¿½s az OnGet-nï¿½l elszï¿½ll
                 return RedirectToPage("./Index");
                // return Page();
             }
@@ -108,6 +109,14 @@ namespace LunchTrain.Pages.Groups
             }
 
             Flags = _context.GroupMemberFlags.ToList();
+            Applications = new List<ApplicationUser>();
+            foreach (var member in _context.GroupApplications)
+            {
+                if (member.GroupID == Group.Name)
+                {
+                    Users.Add(await _userManager.FindByIdAsync(member.UserID));
+                }
+            }
 
             return Page();
         }

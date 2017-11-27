@@ -19,6 +19,10 @@ namespace LunchTrain.Views.Shared.Components.GroupStatusComponent
         public StatusFlag CurrentUserStatus { get; set; }
 
         public List<GroupStatusMemberViewModel> GroupMembers { get; set; }
+
+        public string CanGoButtonAction => $"/groups/{GroupName}/signal/ready";
+
+        public string CannotGoButtonAction => $"/groups/{GroupName}/signal/cantgo";
     }
 
     public class GroupStatusMemberViewModel
