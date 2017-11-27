@@ -47,11 +47,9 @@
             <h4>Groups</h4>
         </a>
         <ul class="navbar list-unstyled">
-            <li><a asp-page="#" class="navbar-link">#group one</a></li>
-            <li><a asp-page="#" class="navbar-link">#group two</a></li>
-            <li><a asp-page="#" class="navbar-link">#group three</a></li>
+            @await Component.InvokeAsync("GroupMemberComponent")
         </ul>
-    </div>
+</div>
     <div class="navbar-fixed-bottom">
         <h4 class="navbar-text">Create Group</h4>
         <a asp-page="/Groups/Create" class="btn btn-default" role="button">

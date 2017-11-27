@@ -10,11 +10,20 @@
 <div>
     <h4>Group</h4>
     <hr />
+    @if (Model.currentUser == Model.Group.Owner)
+    {
+        <div>
+            <a class="btn btn-default" asp-page="./Edit" asp-route-id="@Model.Group.Name">Edit</a> |
+            <a class="btn btn-default" asp-page="./Index">Back to List</a>
+        </div>
+    }
+    else
+    {
+        <div>
+            <a class="btn btn-default" asp-page="./Index">Back to List</a>
+        </div>
+    }
 
-    <div>
-        <a class="btn btn-default" asp-page="./Edit" asp-route-id="@Model.Group.Name">Edit</a> |
-        <a class="btn btn-default" asp-page="./Index">Back to List</a>
-    </div>
 
     <hr />
     <dl class="dl-horizontal">
@@ -38,6 +47,11 @@
         </dd>
     </dl>
 </div>
+
+<div>
+    @await Component.InvokeAsync("GroupStatusComponent", new { groupName = Model.Group.Name })
+</div>
+
 <div>
     <h4>Members</h4>
     @if (Model.currentUser == Model.Group.Owner)
@@ -96,7 +110,7 @@
                         @Html.DisplayNameFor(model => model.Users[0].Email)
                     </th>
                     <th>
-                        Status Flag
+                        @Html.DisplayNameFor(model => model.Flags[0].Status)
                     </th>
                 </tr>
             </thead>
@@ -110,16 +124,18 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Email)
                         </td>
+                
                         <td>
-                            TODO statusflags
+                            @Html.DisplayFor(modelItem => Model.Flags[0].Status)
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     }
-    
+   
 </div>
+
 <div>
     <form method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -133,4 +149,41 @@
             <input type="submit" value="Invite" class="btn btn-default" />
         </div>
     </form>
+</div>
+
+<div>
+    <h4>Applications</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].FullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].Email)
+                </th>
+                
+            </tr>
+        </thead>
+        <tbody>
+           @foreach (var item in Model.Applications)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        <a class="btn btn-success" asp-page="./Details" asp-route-id="@item.FullName">Accept</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" asp-page="./Details" asp-route-id="@item.FullName">Ignore</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
 </div>

@@ -27,6 +27,8 @@ namespace LunchTrain.Pages.Groups
 
         public ApplicationUser currentUser { get; set; }
         public List<ApplicationUser> Users { get; set; }
+        public List<GroupMemberFlag> Flags { get; set; }
+        public List<ApplicationUser> Applications { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -61,11 +63,21 @@ namespace LunchTrain.Pages.Groups
                 groupMembership.GroupID = Group.Name;
                 groupMembership.UserID = user.Id;
 
+                // Create ready-to-go flag for user
+                GroupMemberFlag groupMemberFlag = new GroupMemberFlag();
+                groupMemberFlag.Group = Group;
+                groupMemberFlag.GroupID = Group.Name;
+                groupMemberFlag.User = user;
+                groupMemberFlag.UserID = user.Id;
+                groupMemberFlag.Status = StatusFlag.WaitingForAnswer;
+
+                _context.GroupMemberFlags.Add(groupMemberFlag);
+
                 _context.GroupMemberships.Add(groupMembership);
 
                 await _context.SaveChangesAsync();
 
-                // Ha egybõl visszaadom az oldalt valamiért nem fejezi be az adatbázis mûveleteket és az OnGet-nél elszáll
+                // Ha egybï¿½l visszaadom az oldalt valamiï¿½rt nem fejezi be az adatbï¿½zis mï¿½veleteket ï¿½s az OnGet-nï¿½l elszï¿½ll
                 return RedirectToPage("./Index");
                // return Page();
             }
@@ -95,7 +107,17 @@ namespace LunchTrain.Pages.Groups
                     Users.Add(await _userManager.FindByIdAsync(member.UserID));
                 }
             }
-            
+
+            Flags = _context.GroupMemberFlags.ToList();
+            Applications = new List<ApplicationUser>();
+            foreach (var member in _context.GroupApplications)
+            {
+                if (member.GroupID == Group.Name)
+                {
+                    Users.Add(await _userManager.FindByIdAsync(member.UserID));
+                }
+            }
+
             return Page();
         }
     }

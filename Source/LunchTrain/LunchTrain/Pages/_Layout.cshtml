@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using LunchTrain.Data
+@using Microsoft.AspNetCore.Razor.Language.Intermediate
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
@@ -20,43 +21,54 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+    @if (!SignInManager.IsSignedIn(User))
+    {
+        <style type="text/css">
+            body {
+                padding-top: 50px;
+                padding-bottom: 20px;
+            }
+        </style>
+    }
 </head>
-<body>
-    @if (SignInManager.IsSignedIn(User))
-    {
+<body >
+    <div class="wrapper">
+        @if (SignInManager.IsSignedIn(User))
+        {
         @await Html.PartialAsync("_SidebarLayout")
-    }
-    else
-    {
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-page="/Index" class="navbar-brand">LunchTrain</a>
+        }
+        else
+        {
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a asp-page="/Index" class="navbar-brand">LunchTrain</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a asp-page="/Index">Home</a></li>
+                        <li><a asp-page="/About">About</a></li>
+                    </ul>
+                    @await Html.PartialAsync("_LoginPartial")
+                </div>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-page="/Index">Home</a></li>
-                    <li><a asp-page="/About">About</a></li>
-                </ul>
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
-        </div>
-    </nav>
+        </nav>
 
-    }
-    
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer class="text-center col-lg-12">
-            <p>&copy; 2017 - LunchTrain</p>
-        </footer>
+        }
+
+        <div class="container body-content">
+            @RenderBody()
+            <hr />
+            <footer class="text-center col-lg-12">
+                <p>&copy; 2017 - LunchTrain</p>
+            </footer>
+        </div>
     </div>
 
     <environment include="Development">
