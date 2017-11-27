@@ -15,8 +15,8 @@
     }
     @if (!Model.IsCurrentUserStatusSet)
     {
-        <a class="canGoButton" href="#">Accept - I'm ready to go</a>
-        <a class="cannotGoButton" href="#">Decline - I can't go</a>
+        <a class="canGoButton" href="@Model.CanGoButtonAction">Accept - I'm ready to go</a>
+        <a class="cannotGoButton" href="@Model.CannotGoButtonAction">Decline - I can't go</a>
     }
     else
     {
