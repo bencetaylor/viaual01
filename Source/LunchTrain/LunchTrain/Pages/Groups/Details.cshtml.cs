@@ -109,12 +109,14 @@ namespace LunchTrain.Pages.Groups
             }
 
             Flags = _context.GroupMemberFlags.ToList();
+
             Applications = new List<ApplicationUser>();
+
             foreach (var member in _context.GroupApplications)
             {
                 if (member.GroupID == Group.Name)
                 {
-                    Users.Add(await _userManager.FindByIdAsync(member.UserID));
+                    Applications.Add(await _userManager.FindByIdAsync(member.UserID));
                 }
             }
 

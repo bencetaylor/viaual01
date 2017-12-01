@@ -1,8 +1,9 @@
-﻿@using LunchTrain.Extensions
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using LunchTrain.Extensions
 @using LunchTrain.Views.Shared.Components.GroupMemberComponent
 @model GroupMemberViewModel
 
 @foreach (var member in Model.UserMemberGroup)
 {
-<li><a asp-page="/Groups/Details" asp-route-id="@member.Name" class="navbar-link">@member.Name</a></li>
+    <li><a asp-page="/Groups/Details" asp-route-id="@member.Name" class="navbar-link">@member.Name</a></li>
 }
