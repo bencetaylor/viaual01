@@ -91,7 +91,7 @@
                                 <input type="hidden" asp-for="@item.FullName" />
                                 <input type="submit" value="Drop" class="btn btn-default" />
                             </form>-->
-                            <a class="btn btn-danger" asp-page="./Details" asp-route-id="@item.FullName">Drop</a>
+                            <a class="btn btn-danger" asp-page="./Details" asp-route-id="@Model.Group.Name" asp-route-drop="@item.Id">Drop</a>
                         </td>
                     </tr>
                 }
@@ -176,10 +176,10 @@
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>
                     <td>
-                        <a class="btn btn-success" asp-page="./Details" asp-route-id="@item.FullName">Accept</a>
+                        <a class="btn btn-success" asp-page="./Details" asp-route-id="@Model.Group.Name" asp-route-accept="@item.Id">Accept</a>
                     </td>
                     <td>
-                        <a class="btn btn-danger" asp-page="./Details" asp-route-id="@item.FullName">Ignore</a>
+                        <a class="btn btn-danger" asp-page="./Details" asp-route-id="@Model.Group.Name" asp-route-ignore="@item.Id">Ignore</a>
                     </td>
                 </tr>
             }

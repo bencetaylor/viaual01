@@ -23,6 +23,8 @@ namespace LunchTrain.Views.Shared.Components.GroupStatusComponent
         public string CanGoButtonAction => $"/groups/{GroupName}/signal/ready";
 
         public string CannotGoButtonAction => $"/groups/{GroupName}/signal/cantgo";
+
+        public string ForceButtonAction => $"/groups/{GroupName}/force";
     }
 
     public class GroupStatusMemberViewModel

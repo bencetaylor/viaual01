@@ -57,25 +57,7 @@ namespace LunchTrain.Pages.Groups
                 // Add user to group
                 Group = await _context.Groups.Include(x => x.Owner).SingleOrDefaultAsync(m => m.Name == id);
 
-                GroupMembership groupMembership = new GroupMembership();
-                groupMembership.Group = Group;
-                groupMembership.User = user;
-                groupMembership.GroupID = Group.Name;
-                groupMembership.UserID = user.Id;
-
-                // Create ready-to-go flag for user
-                GroupMemberFlag groupMemberFlag = new GroupMemberFlag();
-                groupMemberFlag.Group = Group;
-                groupMemberFlag.GroupID = Group.Name;
-                groupMemberFlag.User = user;
-                groupMemberFlag.UserID = user.Id;
-                groupMemberFlag.Status = StatusFlag.WaitingForAnswer;
-
-                _context.GroupMemberFlags.Add(groupMemberFlag);
-
-                _context.GroupMemberships.Add(groupMembership);
-
-                await _context.SaveChangesAsync();
+                await AddUserToGroup(Group.Name, user.Id);
 
                 // Ha egyb�l visszaadom az oldalt valami�rt nem fejezi be az adatb�zis m�veleteket �s az OnGet-n�l elsz�ll
                 return RedirectToPage("./Index");
@@ -83,7 +65,41 @@ namespace LunchTrain.Pages.Groups
             }
         }
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        private async Task AddUserToGroup(string groupId, string userId)
+        {
+            await _context.GroupMemberships.AddAsync(new GroupMembership
+            {
+                GroupID = groupId,
+                UserID = userId
+            });
+            await _context.GroupMemberFlags.AddAsync(new GroupMemberFlag
+            {
+                GroupID = groupId,
+                UserID = userId,
+                Status = StatusFlag.WaitingForAnswer
+            });
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task RemoveUserFromGroup(string groupId, string userId)
+        {
+            var user = _context.GroupMemberships.SingleOrDefault(x => x.GroupID == groupId && x.UserID == userId);
+            if (user != null) _context.GroupMemberships.Remove(user);
+            var flag = _context.GroupMemberFlags.SingleOrDefault(x => x.GroupID == groupId && x.UserID == userId);
+            if (flag != null) _context.GroupMemberFlags.Remove(flag);
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task<bool> RemoveUserApplicationFromGroup(string groupId, string userId)
+        {
+            var app = _context.GroupApplications.SingleOrDefault(x => x.UserID == userId && x.GroupID == groupId);
+            if (app == null) return false;
+            _context.GroupApplications.Remove(app);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<IActionResult> OnGetAsync(string id, string accept, string ignore, string drop)
         {
             if (id == null)
             {
@@ -96,6 +112,29 @@ namespace LunchTrain.Pages.Groups
             if (Group == null)
             {
                 return NotFound();
+            }
+            
+            if (Group.OwnerID == currentUser.Id)
+            {                
+                if (!string.IsNullOrWhiteSpace(accept))
+                {
+                    var existed = await RemoveUserApplicationFromGroup(id, accept);
+                    if (existed) await AddUserToGroup(id, accept);
+                    // yes I know this is ugly but the id parameter gets eaten by the route thingy if I use the normal redirectToAction
+                    return new LocalRedirectResult($"~/Groups/Details?id={id}");
+                }
+                if(!string.IsNullOrWhiteSpace(ignore))
+                {
+                    await RemoveUserApplicationFromGroup(id, ignore);
+                    // yes I know this is ugly but the id parameter gets eaten by the route thingy if I use the normal redirectToAction
+                    return new LocalRedirectResult($"~/Groups/Details?id={id}");
+                }
+                if (!string.IsNullOrWhiteSpace(drop))
+                {
+                    await RemoveUserFromGroup(id, drop);
+                    // yes I know this is ugly but the id parameter gets eaten by the route thingy if I use the normal redirectToAction
+                    return new LocalRedirectResult($"~/Groups/Details?id={id}");
+                }
             }
 
             Users = new List<ApplicationUser>();

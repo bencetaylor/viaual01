@@ -40,6 +40,32 @@ namespace LunchTrain.Controllers
             }
         }
 
+        [HttpGet("/groups/{groupName}/force")]
+        public async Task<IActionResult> ForceStatus(string groupName)
+        {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (currentUser == null)
+            {
+                // user not logged in
+                return RedirectToPage("Index");
+            }
+
+            var cid = currentUser.Id;
+
+            var group = _dbContext.Groups.FirstOrDefault(x => x.OwnerID == cid && x.Name == groupName);
+
+            if (group == null)
+            {
+                // user is not the owner of a group
+                return RedirectToPage("Index");
+            }
+
+            await CheckSendNotificationsAsync(groupName, true);
+
+            return new LocalRedirectResult($"~/Groups/Details?id={groupName}");
+        }
+
         [HttpGet("/groups/{groupName}/signal/{signal}")]
         public async Task<IActionResult> SignalStatus(string groupName, string signal)
         {
@@ -84,16 +110,16 @@ namespace LunchTrain.Controllers
                 }
             }
 
-            await CheckSendNotifications(groupName);
+            await CheckSendNotificationsAsync(groupName);
 
-            return new RedirectResult("/groups/");
+            return new LocalRedirectResult($"~/Groups/Details?id={groupName}");
         }
 
-        private async Task CheckSendNotifications(string groupName)
+        private async Task CheckSendNotificationsAsync(string groupName, bool force = false)
         {
             var memberships = _dbContext.GroupMemberships.Where(x => x.GroupID == groupName);
             var flags = _dbContext.GroupMemberFlags.Where(x => x.GroupID == groupName);
-            if (!memberships.All(x => flags.Any(y => y.UserID == x.UserID && y.Status != StatusFlag.WaitingForAnswer))) return;
+            if (!force && !memberships.All(x => flags.Any(y => y.UserID == x.UserID && y.Status != StatusFlag.WaitingForAnswer))) return;
 
             foreach (var groupMemberFlag in flags)
             {

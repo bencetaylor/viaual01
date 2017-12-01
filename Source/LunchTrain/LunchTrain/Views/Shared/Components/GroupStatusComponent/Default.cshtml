@@ -7,7 +7,7 @@
     
     @if (Model.IsCurrentUserOwner)
     {
-        <a href="#">Force reset</a><a> | </a>
+        <a class="forceButton" href="@Model.ForceButtonAction">Force reset</a><a> | </a>
     }
     @if (!Model.IsCurrentUserStatusSet)
     {
