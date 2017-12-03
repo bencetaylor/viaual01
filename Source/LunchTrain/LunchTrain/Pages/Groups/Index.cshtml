@@ -10,6 +10,15 @@
 <p>
     <a class="btn btn-primary" asp-page="Create">Create New</a>
 </p>
+
+@if (Model.AlertMessege != null && Model.AlertType != null)
+{
+    <div class="alert alert-@Model.AlertType alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @Model.AlertMessege
+    </div>
+}
+
 <table class="table">
     <thead>
     <tr>

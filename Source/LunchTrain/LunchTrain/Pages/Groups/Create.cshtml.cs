@@ -57,6 +57,9 @@ namespace LunchTrain.Pages.Groups
             _context.Groups.Add(Group);
             await _context.SaveChangesAsync();
 
+            HttpContext.Session.SetString(IndexModel.SessionKeyMessege, Group.Name + " group created!");
+            HttpContext.Session.SetString(IndexModel.SessionKeyMessegeType, "success");
+
             return RedirectToPage("./Index");
         }
     }

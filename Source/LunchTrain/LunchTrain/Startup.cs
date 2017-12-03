@@ -56,10 +56,9 @@ namespace LunchTrain
                     options.Conventions.AuthorizeFolder("/Account/Manage");
                     options.Conventions.AuthorizePage("/Account/Logout");
                     options.Conventions.AuthorizeFolder("/Groups");
-                });
-
+                })
                 // Ha hozzáadom az middleware-hez exception-t kapok
-                //.AddSessionStateTempDataProvider();
+                .AddSessionStateTempDataProvider();
 
             
             // Register no-op EmailSender used by account confirmation and password reset during development

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LunchTrain.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace LunchTrain.Pages.Groups
 {
@@ -60,6 +61,9 @@ namespace LunchTrain.Pages.Groups
             {
                 
             }
+
+            HttpContext.Session.SetString(IndexModel.SessionKeyMessege, "Saved changes for " + Group.Name + " group!");
+            HttpContext.Session.SetString(IndexModel.SessionKeyMessegeType, "success");
 
             return RedirectToPage("./Index");
         }

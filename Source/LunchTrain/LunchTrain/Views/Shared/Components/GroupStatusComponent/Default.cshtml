@@ -19,10 +19,4 @@
     {
         <p>@Model.CurrentUserStatus.HumanizeStatusFlag(true)</p>
     }
-    <ul>
-        @foreach (var gmm in Model.GroupMembers)
-        {
-            <li>@gmm.UserName - @gmm.MemberStatus.HumanizeStatusFlag(false)</li>
-        }
-    </ul>
 </div>

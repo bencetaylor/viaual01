@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using LunchTrain.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace LunchTrain.Pages.Groups
 {
@@ -69,6 +70,14 @@ namespace LunchTrain.Pages.Groups
 
                 _context.Groups.Remove(Group);
                 await _context.SaveChangesAsync();
+
+                HttpContext.Session.SetString(IndexModel.SessionKeyMessege, "Group deleted successfully!");
+                HttpContext.Session.SetString(IndexModel.SessionKeyMessegeType, "success");
+            }
+            else
+            {
+                HttpContext.Session.SetString(IndexModel.SessionKeyMessege, "Can't delete group!");
+                HttpContext.Session.SetString(IndexModel.SessionKeyMessegeType, "danger");
             }
 
             return RedirectToPage("./Index");

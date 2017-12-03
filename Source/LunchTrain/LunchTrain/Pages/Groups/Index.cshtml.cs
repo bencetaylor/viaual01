@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using LunchTrain.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace LunchTrain.Pages.Groups
 {
@@ -27,6 +28,11 @@ namespace LunchTrain.Pages.Groups
         public IList<Group> UserMemberGroups { get; set; }
         public IList<Group> UserApplicationGroup { get; set; }
         public IList<GroupMemberFlag> Flags { get; set; }
+        public String AlertMessege { get; set; }
+        public String AlertType { get; set; }
+
+        public const string SessionKeyMessege = "_messege";
+        public const string SessionKeyMessegeType = "_type";
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -95,7 +101,11 @@ namespace LunchTrain.Pages.Groups
                     Flags.Add(await _context.GroupMemberFlags.Include(x => x.User).SingleOrDefaultAsync(m => m.GroupMemberFlagID == member.GroupMemberFlagID));
                 }
             }
-
+            
+            if(HttpContext.Session.GetString(SessionKeyMessege) != null)
+                AlertMessege = HttpContext.Session.GetString(SessionKeyMessege);
+            if (HttpContext.Session.GetString(SessionKeyMessegeType) != null)
+                AlertType = HttpContext.Session.GetString(SessionKeyMessegeType);
         }
     }
 }

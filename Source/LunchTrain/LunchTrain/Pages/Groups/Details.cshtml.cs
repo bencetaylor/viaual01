@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using LunchTrain.Data;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace LunchTrain.Pages.Groups
 {
@@ -39,9 +40,7 @@ namespace LunchTrain.Pages.Groups
             [EmailAddress]
             public string Email { get; set; }
         }
-
         
-
         public async Task<IActionResult> OnPostAsync(string id)
         {
             var user = await _userManager.FindByNameAsync(Input.Email);
@@ -50,6 +49,9 @@ namespace LunchTrain.Pages.Groups
             {
                 Console.WriteLine(Input.Email);
                 // Don't reveal that the user does not exist or is not confirmed
+                HttpContext.Session.SetString(IndexModel.SessionKeyMessege, "User doesn't exist!");
+                HttpContext.Session.SetString(IndexModel.SessionKeyMessegeType, "danger");
+
                 return RedirectToPage("./Index");
             }
             else
@@ -58,6 +60,9 @@ namespace LunchTrain.Pages.Groups
                 Group = await _context.Groups.Include(x => x.Owner).SingleOrDefaultAsync(m => m.Name == id);
 
                 await AddUserToGroup(Group.Name, user.Id);
+
+                HttpContext.Session.SetString(IndexModel.SessionKeyMessege, "Added " + user.FullName +" to " + Group.Name);
+                HttpContext.Session.SetString(IndexModel.SessionKeyMessegeType, "success");
 
                 // Ha egyb�l visszaadom az oldalt valami�rt nem fejezi be az adatb�zis m�veleteket �s az OnGet-n�l elsz�ll
                 return RedirectToPage("./Index");
