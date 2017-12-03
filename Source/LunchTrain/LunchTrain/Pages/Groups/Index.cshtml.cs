@@ -26,6 +26,7 @@ namespace LunchTrain.Pages.Groups
         public ApplicationUser user { get; set; }
         public IList<Group> UserMemberGroups { get; set; }
         public IList<Group> UserApplicationGroup { get; set; }
+        public IList<GroupMemberFlag> Flags { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -84,6 +85,17 @@ namespace LunchTrain.Pages.Groups
                     UserApplicationGroup.Add(await _context.Groups.Include(x => x.Owner).SingleOrDefaultAsync(m => m.Name == member.GroupID));
                 }
             }
+
+            Flags = new List<GroupMemberFlag>();
+
+            foreach (var member in _context.GroupMemberFlags)
+            {
+                if (member.UserID == user.Id)
+                {
+                    Flags.Add(await _context.GroupMemberFlags.Include(x => x.User).SingleOrDefaultAsync(m => m.GroupMemberFlagID == member.GroupMemberFlagID));
+                }
+            }
+
         }
     }
 }

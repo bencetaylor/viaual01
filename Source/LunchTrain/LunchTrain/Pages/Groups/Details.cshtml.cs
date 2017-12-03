@@ -147,7 +147,17 @@ namespace LunchTrain.Pages.Groups
                 }
             }
 
-            Flags = _context.GroupMemberFlags.ToList();
+            //Flags = _context.GroupMemberFlags.ToList();
+
+            Flags = new List<GroupMemberFlag>();
+
+            foreach (var member in _context.GroupMemberFlags)
+            {
+                if (member.GroupID == Group.Name)
+                {
+                    Flags.Add(await _context.GroupMemberFlags.Include(x => x.User).SingleOrDefaultAsync(m => m.GroupMemberFlagID == member.GroupMemberFlagID));
+                }
+            }
 
             Applications = new List<ApplicationUser>();
 

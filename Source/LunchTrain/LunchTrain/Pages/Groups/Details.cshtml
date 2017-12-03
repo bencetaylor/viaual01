@@ -13,7 +13,7 @@
     @if (Model.currentUser == Model.Group.Owner)
     {
         <div>
-            <a class="btn btn-default" asp-page="./Edit" asp-route-id="@Model.Group.Name">Edit</a> |
+            <a class="btn btn-default" asp-page="./Edit" asp-route-id="@Model.Group.Name">Edit</a>
             <a class="btn btn-default" asp-page="./Index">Back to List</a>
         </div>
     }
@@ -49,10 +49,9 @@
 </div>
 
 <div>
-    @await Component.InvokeAsync("GroupStatusComponent", new { groupName = Model.Group.Name })
-</div>
-
+    @await Component.InvokeAsync("GroupStatusComponent", new { groupName = Model.Group.Name })</div>
 <div>
+
     <h4>Members</h4>
     @if (Model.currentUser == Model.Group.Owner)
     {
@@ -66,7 +65,7 @@
                         @Html.DisplayNameFor(model => model.Users[0].Email)
                     </th>
                     <th>
-                        Status Flag
+                        @Html.DisplayNameFor(model => model.Flags[0].Status)
                     </th>
                     <th>
                         Drop User
@@ -83,9 +82,15 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Email)
                         </td>
-                        <td>
-                            TODO statusflags
-                        </td>
+                        @foreach (var flag in Model.Flags)
+                        {
+                            @if (item == flag.User)
+                            {
+                            <td>
+                                @Html.DisplayFor(modelItem => flag.Status)
+                            </td>
+                            }
+                        }
                         <td>
                             <!--<form method="post">
                                 <input type="hidden" asp-for="@item.FullName" />
@@ -124,10 +129,15 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Email)
                         </td>
-                
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.Flags[0].Status)
-                        </td>
+                        @foreach (var flag in Model.Flags)
+                        {
+                            @if (item == flag.User)
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => flag.Status)
+                                </td>
+                             }
+                         }
                     </tr>
                 }
             </tbody>

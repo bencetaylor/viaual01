@@ -22,6 +22,9 @@
         <th>
             @Html.DisplayNameFor(model => model.Group[0].Owner)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Flags[0].Status)
+        </th>
         <th></th>
     </tr>
     </thead>
@@ -37,6 +40,20 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Owner.FullName)
+        </td>
+        <td>
+            @foreach (var memberItem in Model.UserMemberGroups)
+            {
+                @if (item.Name == memberItem.Name) { 
+                    @foreach (var flag in Model.Flags)
+                        {
+                            @if (item.Name == flag.GroupID)
+                            {
+                                @Html.DisplayFor(modelItem => flag.Status)
+                            }
+                        }
+                }
+            }
         </td>
         @foreach (var memberItem in Model.UserMemberGroups)
         {
@@ -66,18 +83,14 @@
             if (applicationItem.Name == item.Name && Model.alreadyUsed == false)
             {
                 <td>
-                    <a class="btn btn-default" asp-page="./Details" asp-route-id="@item.Name">Details</a>
+                    <h4>Applied</h4>
                 </td>
-                <td><h4>Applied</h4></td>
                 Model.alreadyUsed = true;
             }
         }
         
         @if (Model.alreadyUsed == false)
         {
-            <td>
-                <a class="btn btn-default" asp-page="./Details" asp-route-id="@item.Name">Details</a>
-            </td>
             <td>
                 <form method="post">
                     <input type="hidden" asp-for="Input.Name" value="@item.Name"/>
