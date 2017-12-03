@@ -7,6 +7,14 @@
 
 <h2>Details</h2>
 
+@if (Model.AlertDetailsMessege != null && Model.AlertDetailsType != null)
+{
+    <div class="alert alert-@Model.AlertDetailsType alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @Model.AlertDetailsMessege
+    </div>
+}
+
 <div>
     <h4>Group</h4>
     <hr />

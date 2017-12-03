@@ -68,6 +68,9 @@ namespace LunchTrain.Pages.Groups
 
             }
 
+            HttpContext.Session.SetString(IndexModel.SessionKeyMessege, "Applied successfully!");
+            HttpContext.Session.SetString(IndexModel.SessionKeyMessegeType, "success");
+
             return RedirectToPage("./Index");
         }
 

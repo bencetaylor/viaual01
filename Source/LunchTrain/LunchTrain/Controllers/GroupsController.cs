@@ -6,6 +6,8 @@ using LunchTrain.Data;
 using LunchTrain.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using LunchTrain.Pages.Groups;
 
 namespace LunchTrain.Controllers
 {
@@ -63,6 +65,9 @@ namespace LunchTrain.Controllers
 
             await CheckSendNotificationsAsync(groupName, true);
 
+            HttpContext.Session.SetString(DetailsModel.SessionKeyDetailsMessege, "Reset successful!");
+            HttpContext.Session.SetString(DetailsModel.SessionKeyDetailsMessegeType, "success");
+
             return new LocalRedirectResult($"~/Groups/Details?id={groupName}");
         }
 
@@ -111,6 +116,9 @@ namespace LunchTrain.Controllers
             }
 
             await CheckSendNotificationsAsync(groupName);
+
+            HttpContext.Session.SetString(DetailsModel.SessionKeyDetailsMessege, "You answered with: " + signal);
+            HttpContext.Session.SetString(DetailsModel.SessionKeyDetailsMessegeType, "success");
 
             return new LocalRedirectResult($"~/Groups/Details?id={groupName}");
         }

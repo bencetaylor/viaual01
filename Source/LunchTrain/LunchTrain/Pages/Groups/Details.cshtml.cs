@@ -30,6 +30,11 @@ namespace LunchTrain.Pages.Groups
         public List<ApplicationUser> Users { get; set; }
         public List<GroupMemberFlag> Flags { get; set; }
         public List<ApplicationUser> Applications { get; set; }
+        public String AlertDetailsMessege { get; set; }
+        public String AlertDetailsType { get; set; }
+
+        public const string SessionKeyDetailsMessege = "_messege";
+        public const string SessionKeyDetailsMessegeType = "_type";
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -173,6 +178,11 @@ namespace LunchTrain.Pages.Groups
                     Applications.Add(await _userManager.FindByIdAsync(member.UserID));
                 }
             }
+
+            if (HttpContext.Session.GetString(SessionKeyDetailsMessege) != null)
+                AlertDetailsMessege = HttpContext.Session.GetString(SessionKeyDetailsMessege);
+            if (HttpContext.Session.GetString(SessionKeyDetailsMessegeType) != null)
+                AlertDetailsType = HttpContext.Session.GetString(SessionKeyDetailsMessegeType);
 
             return Page();
         }

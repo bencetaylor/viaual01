@@ -45,7 +45,7 @@ namespace LunchTrain
             services.AddSession(options =>
             {
                 options.Cookie.Name = ".AdventureWorks.Session";
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.IdleTimeout = TimeSpan.FromSeconds(5);
                 options.Cookie.HttpOnly = true;
             });
 
