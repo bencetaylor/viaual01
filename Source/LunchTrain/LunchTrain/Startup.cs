@@ -39,6 +39,17 @@ namespace LunchTrain
                 facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
             });
 
+            // Adds a default in-memory implementation of IDistributedCache.
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".AdventureWorks.Session";
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+            });
+
+
             services.AddMvc()
                 .AddRazorPagesOptions(options =>
                 {
@@ -47,6 +58,10 @@ namespace LunchTrain
                     options.Conventions.AuthorizeFolder("/Groups");
                 });
 
+                // Ha hozzáadom az middleware-hez exception-t kapok
+                //.AddSessionStateTempDataProvider();
+
+            
             // Register no-op EmailSender used by account confirmation and password reset during development
             // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
             services.AddSingleton<IEmailSender, EmailSender>();
@@ -69,6 +84,8 @@ namespace LunchTrain
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

@@ -47,7 +47,7 @@ namespace LunchTrain.Pages.Groups
                 return NotFound();
             }
 
-            Group = await _context.Groups.FindAsync(id);
+                        Group = await _context.Groups.FindAsync(id);
 
             if (Group != null && Group.OwnerID == (await _userManager.GetUserAsync(HttpContext.User)).Id)
             {
@@ -58,6 +58,15 @@ namespace LunchTrain.Pages.Groups
                         _context.GroupMemberships.Remove(i);
                     }
                 }
+
+                foreach(var i in _context.GroupMemberFlags)
+                {
+                    if(i.GroupID == Group.Name)
+                    {
+                        _context.GroupMemberFlags.Remove(i);
+                    }
+                }
+
                 _context.Groups.Remove(Group);
                 await _context.SaveChangesAsync();
             }
